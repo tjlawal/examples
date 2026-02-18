@@ -52,27 +52,20 @@ wndproc :: proc "system"(hwnd: win.HWND, msg: win.UINT, wparam: win.WPARAM, lpar
 			10, 10, 150, 30,
 			hwnd, nil, nil, nil)
 		assert(button != nil, "Button creation failed")
-		// This is a really crufty way of detecting whether Common Controls v6 is enabled.
-		// It may or may not work reliably on your system.
-		// Do NOT use this.
-		if GetWindowTheme(button) != nil {
+
+		// In addition to the change in visual appearance of the button we just created,
+		// we *attempt* to detect programmatically whether we've successfully linked to Common Controls v6.
+		// However, this is not an intended use case, so it may or may not work reliably on your system.
+		// Do NOT use this in production code.
+		if win.GetWindowTheme(button) != nil {
+			// Common Controls v6 is probably linked successfully.
 			win.SetWindowTextW(button, "Modern button")
 		} else {
+			// Common Controls v6 is probably not linked successfully.
 			win.SetWindowTextW(button, "Dated button")
 		}
 	case win.WM_DESTROY:
 		win.PostQuitMessage(0)
 	}
 	return win.DefWindowProcW(hwnd, msg, wparam, lparam)
-}
-
-// NOTE: The following should probably be merged upstream into core:sys/windows
-
-HTHEME :: distinct win.HANDLE
-
-foreign import uxtheme "system:uxtheme.lib"
-
-@(default_calling_convention="system")
-foreign uxtheme {
-	GetWindowTheme :: proc(hwnd: win.HWND) -> HTHEME ---
 }
