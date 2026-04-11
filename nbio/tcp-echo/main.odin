@@ -31,7 +31,7 @@ main :: proc() {
 	server: Server
 
 	socket, listen_err := nbio.listen_tcp({nbio.IP4_Any, 1234})
-	fmt.assertf(listen_err == nil, "Error listening on localhost:1234: %v", err)
+	fmt.assertf(listen_err == nil, "Error listening on localhost:1234: %v", listen_err)
 	server.socket = socket
 
 	nbio.accept_poly(socket, &server, on_accept)
