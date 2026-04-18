@@ -299,8 +299,8 @@ main :: proc() {
 
 win32_proc :: proc "stdcall" (hwnd: win32.HWND, msg: win32.UINT, wParam : win32.WPARAM, lParam : win32.LPARAM) -> win32.LRESULT {
 	switch(msg) {
-		case win32.WM_DESTROY:
-			win32.PostQuitMessage(0)
+	case win32.WM_DESTROY:
+		win32.PostQuitMessage(0)
 	}
 
 	return win32.DefWindowProcW(hwnd, msg, wParam, lParam)
